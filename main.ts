@@ -15,6 +15,17 @@ if (LINE.length < 1 || LINE.length > 200 || LINE.trim().length === 0) {
   process.exit(1);
 }
 
+// Reviser gate (second session): the entry must be a single line with no
+// leading/trailing whitespace, so the grader reads exactly one clean line
+// and the character count above stays honest. A stray newline or padding
+// would silently change what the judge sees, so refuse it loudly instead.
+if (LINE !== LINE.trim() || /[\r\n]/.test(LINE)) {
+  console.error(
+    "Gate refused: entry must be a single line with no leading/trailing whitespace.",
+  );
+  process.exit(1);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
 console.log(`Wrote ${LINE.length}-character entry to /output/entry.txt`);
